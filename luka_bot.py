@@ -14,6 +14,7 @@ import stats_scraping
 import game_scraping
 import build_reply
 import twitter_keys
+import update_luka_database
 
 CONSUMER_KEY = twitter_keys.CONSUMER_KEY
 CONSUMER_SECRET = twitter_keys.CONSUMER_SECRET
@@ -82,12 +83,16 @@ def post_game_stats(current_stats_dict):
     # First we check to see if a game even happened or if Luka played in the game.
     if (game_scraping.game_happened(current_stats_dict) and not game_scraping.luka_is_injured_or_resting()):
 
-        # If so, we get the up-to-date stats for the game just played.
+        # If a game has occured, we update the data set.
+        update_luka_database.update_database()
+
+        # We get the up-to-date stats for the game just played.
         current_stats_dict = game_scraping.get_game_stats()
         print("Reporting new game sats.")
 
         # And we tweet the most relevant stats (PTS, RBS, AST, FG%, outcome, opponent)
         api.update_status("Luka had " + current_stats_dict['points'] + " PTS, " + current_stats_dict['rebounds'] + " RBS, " + current_stats_dict['assists'] + " AST while shooting " + current_stats_dict['field_goals'] + " from the floor in a " + current_stats_dict['outcome'] + " against " + current_stats_dict['opponent'] + ".")
+
 
     # Afterwards, we return the current_stats_dict.
     return current_stats_dict
@@ -99,7 +104,6 @@ def post_game_stats(current_stats_dict):
 
 # First, get Luka's stats in the latest game played.
 current_stats_dict = game_scraping.get_game_stats()
-
 while True:
     # First, reply to mentions.
     reply_to_tweets()
