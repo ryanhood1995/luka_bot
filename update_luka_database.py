@@ -1,6 +1,8 @@
 # ------------------------------------------------------------------------
-# This file contains a method which updates the Luka database that we are
-# maintaining.
+# This file contains a method which updates the Luka dataset that we are
+# maintaining.  Excel is unfriendly with entries "12-15" interpreting them
+# as dates.  To prevent this from happening, a helper function that turns
+# input like "12-15" into "12--15" is employed for those cells.
 #
 # author: Ryan Hood
 # email: ryanchristopherhood@gmail.com
@@ -37,7 +39,7 @@ def update_database():
     db_game_number = df['game_number'].iloc[-1]
 
     # Now, we get the same stats from the ESPN website
-    #lg = last game values from web scraping
+    # lg = last game values from web scraping
     lg_points = str(game_scraping.get_game_stats()["points"])
     lg_rebounds = str(game_scraping.get_game_stats()["rebounds"])
     lg_assists = str(game_scraping.get_game_stats()["assists"])
@@ -65,10 +67,24 @@ def update_database():
         print("New Game Occured...Updating Luka Database.")
 
         # Create a new entry using the lg values.  Notice that 'game_number' is actually just incremented by 1 over the previous db value.
-        new_entry_dict = {'points': game_scraping.get_game_stats()['points'], 'rebounds': game_scraping.get_game_stats()['rebounds'], 'assists': game_scraping.get_game_stats()['assists'], 'field_goals': game_scraping.get_game_stats()['field_goals'], 'minutes_played': game_scraping.get_game_stats()['minutes_played'], 'fg_percent': game_scraping.get_game_stats()['fg_percent'], 'three_pt_field_goals': game_scraping.get_game_stats()['three_pt_field_goals'], 'three_pt_percent': game_scraping.get_game_stats()['three_pt_percent'], 'free_throws': game_scraping.get_game_stats()['free_throws'], 'free_throw_percent': game_scraping.get_game_stats()['free_throw_percent'], 'blocks': game_scraping.get_game_stats()['blocks'], 'steals': game_scraping.get_game_stats()['steals'], 'fouls': game_scraping.get_game_stats()['fouls'], 'turnovers': game_scraping.get_game_stats()['turnovers'], 'opponent': game_scraping.get_game_stats()['opponent'], 'outcome': game_scraping.get_game_stats()['outcome'], 'game_number': db_game_number + 1}
+        new_entry_dict = {'points': game_scraping.get_game_stats()['points'], 'rebounds': game_scraping.get_game_stats()['rebounds'], 'assists': game_scraping.get_game_stats()['assists'], 'field_goals': convertToTwoDashes(game_scraping.get_game_stats()['field_goals']), 'minutes_played': game_scraping.get_game_stats()['minutes_played'], 'fg_percent': game_scraping.get_game_stats()['fg_percent'], 'three_pt_field_goals': convertToTwoDashes(game_scraping.get_game_stats()['three_pt_field_goals']), 'three_pt_percent': game_scraping.get_game_stats()['three_pt_percent'], 'free_throws': convertToTwoDashes(game_scraping.get_game_stats()['free_throws']), 'free_throw_percent': game_scraping.get_game_stats()['free_throw_percent'], 'blocks': game_scraping.get_game_stats()['blocks'], 'steals': game_scraping.get_game_stats()['steals'], 'fouls': game_scraping.get_game_stats()['fouls'], 'turnovers': game_scraping.get_game_stats()['turnovers'], 'opponent': game_scraping.get_game_stats()['opponent'], 'outcome': game_scraping.get_game_stats()['outcome'], 'game_number': db_game_number + 1}
 
         # Add the new entry to the Data Frame.
         modified_df = df.append(new_entry_dict, ignore_index=True)
 
         # Write the new Data Frame to the same CSV file.
         modified_df.to_csv(r"C:\Users\User\Data Science Projects\twitter_bots\luka-stats-2019-2020.csv", index=None, header=True)
+
+
+def convertToTwoDashes(one_dash_string):
+    # First find the index of the dash in the one_dash_string
+    for i in range(0, len(one_dash_string)-1):
+        if (one_dash_string[i] == "-"):
+            index = i
+
+    # Now construct the new string in three parts: 1.) Before dash 2.) Two dashes 3.) After dash.
+    two_dash_string = one_dash_string[:index]
+    two_dash_string = two_dash_string + "--"
+    two_dash_string = two_dash_string + one_dash_string[index+1:]
+
+    return two_dash_string
