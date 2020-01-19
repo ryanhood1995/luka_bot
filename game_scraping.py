@@ -92,6 +92,8 @@ def luka_is_injured_or_resting():
 def game_happened(last_game_stats):
     # This method takes an old occurence of game_stats and re-runs the get_game_stats() method.  If there is disagreement on
     # the points, rebounds, assists, field goals, or minutes played, then there almost certainly was a new game.
-    if (last_game_stats['points'] == get_game_stats()['points'] and last_game_stats['rebounds'] == get_game_stats()['rebounds'] and last_game_stats['assists'] == get_game_stats()['assists'] and last_game_stats['field_goals'] == get_game_stats()['field_goals'] and last_game_stats['minutes_played'] == get_game_stats()['minutes_played']):
+    # First, get a dict of the most recent game stats.
+    newest_game_dict = get_game_stats()
+    if (last_game_stats['points'] == newest_game_dict['points'] and last_game_stats['rebounds'] == newest_game_dict['rebounds'] and last_game_stats['assists'] == newest_game_dict['assists'] and last_game_stats['field_goals'] == newest_game_dict['field_goals'] and last_game_stats['minutes_played'] == newest_game_dict['minutes_played']):
         return False
     return True
