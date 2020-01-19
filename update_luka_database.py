@@ -12,7 +12,7 @@ import game_scraping
 import pandas as pd
 import numpy as np
 
-def update_database():
+def update_dataset():
     # First, we read in the current Data Frame
     df = pd.read_csv(r"C:\Users\User\Data Science Projects\twitter_bots\luka-stats-2019-2020.csv", encoding="utf-8-sig")
     # df = df.dropna(axis='rows')

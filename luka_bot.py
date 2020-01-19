@@ -84,7 +84,7 @@ def post_game_stats(current_stats_dict):
     if (game_scraping.game_happened(current_stats_dict) and not game_scraping.luka_is_injured_or_resting()):
 
         # If a game has occured, we update the data set.
-        update_luka_database.update_database()
+        update_luka_database.update_dataset()
 
         # We get the up-to-date stats for the game just played.
         current_stats_dict = game_scraping.get_game_stats()
@@ -108,7 +108,7 @@ while True:
     # First, reply to mentions.
     reply_to_tweets()
 
-    # Then post game stats, if a new game has been played.
+    # Then post game stats, if a new game has been played.  This also updates the data set.
     current_stats_dict = post_game_stats(current_stats_dict)
 
     # Post visualizations...
