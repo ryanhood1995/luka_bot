@@ -40,22 +40,24 @@ def update_database():
 
     # Now, we get the same stats from the ESPN website
     # lg = last game values from web scraping
-    lg_points = str(game_scraping.get_game_stats()["points"])
-    lg_rebounds = str(game_scraping.get_game_stats()["rebounds"])
-    lg_assists = str(game_scraping.get_game_stats()["assists"])
-    lg_field_goals = game_scraping.get_game_stats()["field_goals"] # no str conversion since it already is a string
-    lg_minutes_played = str(game_scraping.get_game_stats()["minutes_played"])
-    lg_fg_percent = str(game_scraping.get_game_stats()["fg_percent"])
-    lg_three_pt_field_goals = game_scraping.get_game_stats()["three_pt_field_goals"] # no str conversion since it already is a string
-    lg_three_pt_percent = str(game_scraping.get_game_stats()["three_pt_percent"])
-    lg_free_throws = game_scraping.get_game_stats()["free_throws"] # no str conversion since it already is a string
-    lg_free_throw_percent = str(game_scraping.get_game_stats()["free_throw_percent"])
-    lg_blocks = str(game_scraping.get_game_stats()["blocks"])
-    lg_steals = str(game_scraping.get_game_stats()["steals"])
-    lg_fouls = str(game_scraping.get_game_stats()["fouls"])
-    lg_turnovers = str(game_scraping.get_game_stats()["turnovers"])
-    lg_opponent = game_scraping.get_game_stats()["opponent"] # no str conversion since it already is a string
-    lg_outcome = game_scraping.get_game_stats()["outcome"] # no str conversion since it already is a string
+    newest_game_dict = game_scraping.get_game_stats()
+
+    lg_points = str(newest_game_dict["points"])
+    lg_rebounds = str(newest_game_dict["rebounds"])
+    lg_assists = str(newest_game_dict["assists"])
+    lg_field_goals = newest_game_dict["field_goals"] # no str conversion since it already is a string
+    lg_minutes_played = str(newest_game_dict["minutes_played"])
+    lg_fg_percent = str(newest_game_dict["fg_percent"])
+    lg_three_pt_field_goals = newest_game_dict["three_pt_field_goals"] # no str conversion since it already is a string
+    lg_three_pt_percent = str(newest_game_dict["three_pt_percent"])
+    lg_free_throws = newest_game_dict["free_throws"] # no str conversion since it already is a string
+    lg_free_throw_percent = str(newest_game_dict["free_throw_percent"])
+    lg_blocks = str(newest_game_dict["blocks"])
+    lg_steals = str(newest_game_dict["steals"])
+    lg_fouls = str(newest_game_dict["fouls"])
+    lg_turnovers = str(newest_game_dict["turnovers"])
+    lg_opponent = newest_game_dict["opponent"] # no str conversion since it already is a string
+    lg_outcome = newest_game_dict["outcome"] # no str conversion since it already is a string
 
     # If any of the two values are different, then a new game must have occured.
     if ((db_points != lg_points) or (db_rebounds != lg_rebounds) or (db_assists != lg_assists) or (db_field_goals != lg_field_goals) or (db_minutes_played != lg_minutes_played)
@@ -67,7 +69,8 @@ def update_database():
         print("New Game Occured...Updating Luka Database.")
 
         # Create a new entry using the lg values.  Notice that 'game_number' is actually just incremented by 1 over the previous db value.
-        new_entry_dict = {'points': game_scraping.get_game_stats()['points'], 'rebounds': game_scraping.get_game_stats()['rebounds'], 'assists': game_scraping.get_game_stats()['assists'], 'field_goals': convertToTwoDashes(game_scraping.get_game_stats()['field_goals']), 'minutes_played': game_scraping.get_game_stats()['minutes_played'], 'fg_percent': game_scraping.get_game_stats()['fg_percent'], 'three_pt_field_goals': convertToTwoDashes(game_scraping.get_game_stats()['three_pt_field_goals']), 'three_pt_percent': game_scraping.get_game_stats()['three_pt_percent'], 'free_throws': convertToTwoDashes(game_scraping.get_game_stats()['free_throws']), 'free_throw_percent': game_scraping.get_game_stats()['free_throw_percent'], 'blocks': game_scraping.get_game_stats()['blocks'], 'steals': game_scraping.get_game_stats()['steals'], 'fouls': game_scraping.get_game_stats()['fouls'], 'turnovers': game_scraping.get_game_stats()['turnovers'], 'opponent': game_scraping.get_game_stats()['opponent'], 'outcome': game_scraping.get_game_stats()['outcome'], 'game_number': db_game_number + 1}
+        new_entry_dict = {'points': lg_points, 'rebounds': lg_rebounds, 'assists': lg_assists, 'field_goals': convertToTwoDashes(lg_field_goals), 'minutes_played': lg_minutes_played, 'fg_percent': lg_fg_percent, 'three_pt_field_goals': convertToTwoDashes(lg_three_pt_field_goals), 'three_pt_percent': lg_three_pt_percent, 'free_throws': convertToTwoDashes(lg_free_throws), 'free_throw_percent': lg_free_throw_percent
+        , 'blocks': lg_blocks, 'steals': lg_steals, 'fouls': lg_fouls, 'turnovers': lg_turnovers, 'opponent': lg_opponent, 'outcome': lg_outcome, 'game_number': db_game_number + 1}
 
         # Add the new entry to the Data Frame.
         modified_df = df.append(new_entry_dict, ignore_index=True)
