@@ -14,7 +14,7 @@ import numpy as np
 
 def update_dataset():
     # First, we read in the current Data Frame
-    df = pd.read_csv(r"C:\Users\User\Data Science Projects\twitter_bots\luka-stats-2019-2020.csv", encoding="utf-8-sig")
+    df = pd.read_csv(r"C:\Users\User\Data Science Projects\luka_bot\luka-stats-2019-2020.csv", encoding="utf-8-sig")
     # df = df.dropna(axis='rows')
 
     # Now, we use the Data Frame just constructed to get the last game's stats.
@@ -76,7 +76,7 @@ def update_dataset():
         modified_df = df.append(new_entry_dict, ignore_index=True)
 
         # Write the new Data Frame to the same CSV file.
-        modified_df.to_csv(r"C:\Users\User\Data Science Projects\twitter_bots\luka-stats-2019-2020.csv", index=None, header=True)
+        modified_df.to_csv(r"C:\Users\User\Data Science Projects\luka_bot\luka-stats-2019-2020.csv", index=None, header=True)
 
 
 def convertToTwoDashes(one_dash_string):
